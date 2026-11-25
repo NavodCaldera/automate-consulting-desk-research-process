@@ -13,7 +13,7 @@
 | Output file | `presentation/MTI-ResearchOS.pptx` |
 | Generator script | `presentation/build_deck.py` (python-pptx) **or** `presentation/build_deck.js` (pptxgenjs). Pick one and commit it |
 | Slide size | 16:9, 13.333 in × 7.5 in |
-| Slide count | 15 main + 1 title + 4 appendix = **20** |
+| Slide count | **21 main slides** (1–18, 18A, 19, 20) + **4 appendix** (A1–A4) = 25 |
 | Speaker notes | Required on every slide (text given below) |
 | Charts | **Native PowerPoint charts** (editable), not images |
 | Diagrams | Built from native shapes (rectangles, rounded rectangles, arrows, connectors), not images |
@@ -422,6 +422,31 @@ confidence:   0.94          status: [Verified]
 
 ---
 
+### Slide 18A: Cost optimisation (insert after slide 18)
+- **Kicker:** `STEP 5 · COST OPTIMISATION`
+- **Title:** `Caching and batching cut cost by about 37% — accuracy controls are never on the table`
+- **Layout:** left 50% native chart; right 50% three-tier lever list; bottom strip of "Never cut" chips.
+- **Chart (native stacked column, two columns `Baseline` and `Optimised`), "Cost per brief before buffer (USD)":**
+  - Series (stack order bottom to top), Baseline / Optimised:
+    - `Research subagents` 7.50 / 4.00 (TEAL)
+    - `Opus plan + write` 4.40 / 3.50 (INK)
+    - `Web search` 2.25 / 1.50 (SLATE)
+    - `S3 corroboration` 0.90 / 0.75 (`5EEAD4`)
+    - `Extraction + S2 judge` 0.77 / 0.39 (MINT)
+  - Data labels `ctr`. Totals above each column as text boxes: `$15.82 → ≈ $21 with buffer` and `$10.14 → ≈ $13 with buffer`.
+  - Chip between the columns: `−37%`.
+- **Small insight line under the chart (12 pt):** `Input = 63% of the Claude bill — agents re-read history and pages, so we cut input, not output.`
+- **Lever list (right):**
+  - GREEN chip `No quality impact`: **Prompt caching** (≈ −$3.40) · **Batch API 50% off** (≈ −$0.40) · **Shared page and search cache** (≈ −$0.75)
+  - AMBER chip `Gold-set tested`: **Relevant text only** (≈ −$0.50) · **Short structured outputs** (≈ −$0.50) · **Opus only for writing** (≈ −$0.80)
+  - TEAL chip `Grows over time`: **Fact Base reuse** · **Better S1 rules** · **Fewer retries**
+- **"Never cut" strip (RED-outline chips):** `S3 on headline numbers` · `Cross-vendor judge` · `Frontier client writing` · `No free tier for client data` · `Weekly audit`
+- **Two small comparison chips (bottom right, 11 pt):** `API, not claude.ai website — the website can't be automated` · `Search API + reader, not browser automation — 10–50× fewer tokens`
+- **Source line:** `Anthropic pricing: cache reads 0.05× input (Opus/Sonnet 5.5), Batch API −50%, checked 25 Nov 2026. Savings are estimates to confirm on the gold set; the budget uses the unoptimised $21.`
+- **Notes:** "The budget I showed uses $21 per brief, without optimisation. Caching alone saves about $3.40 because research agents resend their history on every step. None of these levers touch the accuracy controls. That list is fixed."
+
+---
+
 ### Slide 19: Build vs buy and the rollout plan
 - **Kicker:** `STEP 3 · IMPLEMENTATION PLAN`
 - **Title:** `A 16-week rollout with go/no-go gates, starting with MTI’s own past briefs`
@@ -450,7 +475,7 @@ confidence:   0.94          status: [Verified]
 - **Three columns (WHITE text, TEAL number chips 1–3):**
   1. **Accurate:** "Ledger-only writing, a three-stage cascade, cross-vendor judging, weekly audit"
   2. **Automated:** "≈92% of analyst time, humans at three short gates"
-  3. **Affordable:** "$0 prototype · ≈$21 per brief · payback ≈ 5 months"
+  3. **Affordable:** "$0 prototype · ≈$21 per brief (≈$13 optimised) · payback ≈ 5 months"
 - **"What we need from MTI" panel (MINT fill, INK text):** `Brief volumes & analyst hours · Data subscriptions & licence terms · Client AI-use rules · MTI slide template · Microsoft 365 setup`
 - **Notes:** "My ask is a two-week Phase 0 with 20–30 past briefs. That alone proves or disproves the numbers on MTI's own work."
 
@@ -478,7 +503,7 @@ confidence:   0.94          status: [Verified]
 
 ## 5. QA checklist (must pass before committing)
 
-- [ ] 20 slides + appendix; slide numbers in the footer; no footer on the title or closing slides.
+- [ ] 21 main slides (including 18A) + 4 appendix; slide numbers in the footer; no footer on the title or closing slides.
 - [ ] Every number matches `04-final-decision.md` (spot-check: 92%, 98% / 95%, 100% / 25% / 8%, $21, $11, $20, $0.26, $770, $5,600, LKR 1.85M, 552 h, ~5 months, 760+ / 56 / 7).
 - [ ] No text overflow or overlap: render to PDF/images (LibreOffice or PowerPoint export) and inspect every slide.
 - [ ] Titles are in the same position, font and size on every content slide.

@@ -22,7 +22,7 @@ MTI Consulting is an international strategy consultancy founded in 1997 (now in 
 3. **Automation:** humans touch only **three gates** (approve the plan, clear the exception queue, sign off), about **1.2 hours per brief plus about 0.4 hours of audit**. That is **about 92% of analyst time automated**.
 4. **Proof:** automation is always reported **together with audited accuracy**. A severity-weighted error budget tightens automation automatically if accuracy slips.
 5. **Models:** a **hybrid**. Claude does planning, research and writing. Gemini Flash-Lite judges Claude's work, because a model shouldn't grade its own family. **Free and local models** are used for the prototype and for confidential documents.
-6. **Cost:** **≈ USD 0 for the prototype**, **≈ USD 21 per brief** in production, about **USD 770 a month at 30 briefs**. The build costs about USD 5,600 and pays back **within about 2 months of go-live**.
+6. **Cost:** **≈ USD 0 for the prototype**, **≈ USD 21 per brief** in production (**≈ USD 13 with caching and batching, same quality**), about **USD 770 a month at 30 briefs**. The build costs about USD 5,600 and pays back **within about 2 months of go-live**.
 
 ---
 
@@ -371,6 +371,47 @@ Cost levers: the **Batch API** is 50% off (for S2/S3, which aren't urgent), and 
 - **Scenario A (prototype):** Gemini free tier + Ollama + Tavily's 1,000 free credits a month + Exa's $10 free monthly credits + Jina Reader + Docling = **$0**. Public data only.
 - **Why B over D:** an independent judge costs only about **$0.26 more per brief**.
 - **Why B over C for now:** Scenario C is cheaper but unproven on research tool use. Phase 2 runs a gold-set bake-off, and if C matches B, switching is a config change.
+
+### 10.4 Cost optimisation without reducing quality
+**Where the money goes:** across Claude usage, **input is about 63% of the bill** ($8.30 input vs $4.95 output per brief). Output is 5× more expensive per token, but research agents read far more than they write. The biggest single cost is **research agents re-reading their own history and web pages**, so the savings come from cutting input, not output.
+
+**Tier 1: no effect on quality (identical model output)**
+| Lever | How | Saving per brief |
+|---|---|---|
+| Prompt caching | Agent loops resend their history each step. The repeated part (instructions, tools, plan, earlier steps) is billed at 0.05× input on Opus and Sonnet 5.5 | ≈ $3.40 |
+| Batch API (50% off) | Extraction and S2 judging run as batch jobs; same-day delivery still holds | ≈ $0.40 |
+| Shared page and search cache | Each page or search is fetched once per brief (and across briefs); free official APIs first | ≈ $0.75 |
+| Code-built deliverables | Charts, tables and slides come from Python templates, not LLM tokens | (already in design) |
+
+**Tier 2: quality held, confirmed on the gold set before switching**
+| Lever | How | Saving per brief |
+|---|---|---|
+| Send only relevant text | Clean text, dedupe, relevant PDF pages only. **S1 still matches quotes against the full stored snapshot** | ≈ $0.50 |
+| Short structured outputs | Compact JSON notes; output caps per step | ≈ $0.50 |
+| Opus only for planning and final writing | Supervisor runs on Sonnet | ≈ $0.80 (not counted below) |
+| Strict effort scaling and stop rules | 1 agent for simple briefs; stop when every sub-question has verified answers | Varies |
+
+**Tier 3: savings that grow over time:** Fact Base reuse on repeat markets, better S1 rules (fewer S2 calls), and fewer retries (buffer 30% → 20%).
+
+| | Baseline (§10.3 B) | Optimised (Tier 1 + Tier 2 text and output levers) |
+|---|---|---|
+| Opus (plan/write) | $4.40 | $3.50 |
+| Research subagents | $7.50 | $4.00 |
+| Extraction | $0.45 | $0.23 |
+| S2 judge | $0.32 | $0.16 (if Gemini batch pricing applies; check) |
+| S3 corroboration | $0.90 | $0.75 |
+| Web search | $2.25 | $1.50 |
+| **Subtotal** | **$15.82** | **$10.14** |
+| **+30% buffer** | **≈ $21** | **≈ $13 (≈ 37% lower)** |
+| Monthly usage at 30 briefs | $617 | ≈ $396 |
+
+With Tier 3 over time, the cost could fall toward **$10–11 per brief** (an estimate to confirm on the gold set). The budget in §12 deliberately stays on the **unoptimised $21**, so the optimisation is upside, not an assumption the ROI depends on.
+
+**Never cut, because accuracy depends on these:** S3 corroboration on headline numbers; the cross-vendor judge (switching to a same-family judge saves only about $0.20); frontier-quality client writing without gold-set proof; the no-free-tier rule for client data; the weekly audit sample.
+
+**Website vs API:** the system runs on the **Claude API**, not the claude.ai website. The website can't be automated (consumer terms forbid scripted access), has message caps, runs one chat at a time and can't feed the ledger. Claude Team seats remain optional for consultants' own ad hoc work.
+
+**Browser automation vs search APIs:** reading a page by Claude browsing (computer use) takes a screenshot at every step, which uses roughly 10–50× the tokens of a search API plus page reader and is much slower. It is used only as a fallback for the under 5% of pages APIs can't read (click-through government portals, JavaScript dashboards).
 
 ---
 
