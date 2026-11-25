@@ -9,6 +9,7 @@ MTI Consulting – Strategy Consulting (Agentic AI) internship assignment.
 | `source-documents/MTI Agentic Desk-Research Plan.pdf` | A first-draft plan generated with Perplexity |
 | `01-critique-of-perplexity-plan.md` | What I agree with, what I disagree with and why, and what is missing |
 | `02-proposal.md` | My improved proposal, "MTI ResearchOS", covering all 5 assignment steps |
+| `03-final-approach.md` | **The final, submission-ready plan** — consolidates everything, resolves open decisions and supersedes `02-proposal.md` where they differ |
 
 ## Key improvements over the Perplexity draft
 1. **Triangulation / Estimation Agent:** fills data gaps the way consultants do, instead of handing them back to humans.
