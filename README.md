@@ -10,6 +10,7 @@ MTI Consulting – Strategy Consulting (Agentic AI) internship assignment.
 | `01-critique-of-perplexity-plan.md` | What I agree with, what I disagree with and why, and what is missing |
 | `02-proposal.md` | My improved proposal, "MTI ResearchOS", covering all 5 assignment steps |
 | `03-final-approach.md` | **The final, submission-ready plan** — consolidates everything, resolves open decisions and supersedes `02-proposal.md` where they differ |
+| `04-final-decision.md` | **Definitive version.** Fixes 7 issues found in `03`, sets one set of accuracy targets, and adds the free / open-weight LLM cost analysis (hybrid stack ≈ USD 20 per brief, prototype ≈ USD 0) |
 
 ## Key improvements over the Perplexity draft
 1. **Triangulation / Estimation Agent:** fills data gaps the way consultants do, instead of handing them back to humans.
